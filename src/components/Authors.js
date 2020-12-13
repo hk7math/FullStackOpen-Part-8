@@ -53,7 +53,11 @@ const Authors = (props) => {
       <h3>Set birthyear</h3>
       <div>
         name
-        <input value={name} onChange={({target}) => setName(target.value)} />
+        <select onChange={({target}) => setName(authors[target.selectedIndex].name)}>
+          {authors.map(a => 
+            <option key={a.name}>{a.name}</option>
+          )}
+        </select>
       </div>
       <div>
         born
