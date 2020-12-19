@@ -1,22 +1,46 @@
-import React from 'react'
-import { useQuery } from '@apollo/client'
-import { RECOMMEND } from '../queries'
+import React, { useEffect, useState } from 'react'
+import { useLazyQuery } from '@apollo/client'
+import { ME, RECOMMEND } from '../queries'
 
-const Recommendations = (props) => {
-  const result = useQuery(RECOMMEND)
+const Recommendations = ({ show, token }) => {
+  const [getMe, resMe] = useLazyQuery(ME)
+  const [getRecommend, resRecommend] = useLazyQuery(RECOMMEND)
+  const [genre, setGenre] = useState('')
+  const [books, setBooks] = useState([])
 
-  if (!props.show) {
+  useEffect(() => {
+    console.log('getMe');
+    if (resMe.data) {
+      resMe.refetch()
+    } else {
+      getMe()
+    }
+  }, [getMe, token])
+
+  useEffect(() => {
+    console.log(resMe)
+    if (!resMe.loading && resMe.data && resMe.data.me) {
+      setGenre(resMe.data.me.favoriteGenre)
+    }
+  }, [resMe])
+
+  useEffect(() => {
+    console.log('getRecommend')
+    if (genre !== '') {
+      console.log(genre || 'empty');
+      getRecommend({ variables: { genre }})
+    }
+  }, [genre, getRecommend])
+
+  useEffect(() => {
+    console.log(resRecommend);
+    if (resRecommend.called && !resRecommend.loading) {
+      setBooks(resRecommend.data.allBooks)
+    }
+  }, [resRecommend])
+
+  if (!show) {
     return null
-  }
-
-  let books = []
-  let genre = ''
-  if (!result.loading) {
-    genre = result.data.me.favoriteGenre
-    books = result.data.allBooks
-      .filter(book => 
-        book.genres.includes(genre)
-      )
   }
 
   return (

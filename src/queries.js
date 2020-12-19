@@ -23,18 +23,24 @@ query {
 }
 `
 
-export const RECOMMEND = gql`
+export const ME = gql`
 query {
-  allBooks {
+  me {
+    favoriteGenre
+  }
+}
+`
+
+export const RECOMMEND = gql`
+query recommend($genre: String!) {
+  allBooks (
+    genre: $genre
+  ) {
     title
     author {
       name
     }
     published
-    genres
-  }
-  me {
-    favoriteGenre
   }
 }
 `

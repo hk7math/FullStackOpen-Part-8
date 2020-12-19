@@ -13,6 +13,7 @@ const App = () => {
   const client = useApolloClient()
 
   const logout = () => {
+    setPage('authors')
     setToken(null)
     localStorage.clear()
     client.resetStore()
@@ -47,6 +48,7 @@ const App = () => {
 
       <Recommendations
         show={page === 'recommend'}
+        token={token}
       />
 
       <LoginForm
