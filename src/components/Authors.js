@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useQuery, useMutation } from '@apollo/client'
 import { ALL_AUTHORS, SET_BIRTH } from '../queries'
 
@@ -9,12 +9,16 @@ const Authors = (props) => {
   const [setBirth] = useMutation(SET_BIRTH, {
     refetchQueries: [{ query: ALL_AUTHORS }]
   })
+  let authors = []
+
+  useEffect(() => {
+    setName(name ? name : authors[0] ? authors[0].name : '')
+  }, [authors, name])
 
   if (!props.show) {
     return null
   }
 
-  let authors = []
   if (!result.loading) {
     authors = result.data.allAuthors
   }
