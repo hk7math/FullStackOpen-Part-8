@@ -2,44 +2,43 @@ import React, { useEffect, useState } from 'react'
 import { useLazyQuery } from '@apollo/client'
 import { ME, RECOMMEND } from '../queries'
 
-const Recommendations = ({ show, token }) => {
+const Recommendations = ({ show, token, page }) => {
   const [getMe, resMe] = useLazyQuery(ME)
   const [getRecommend, resRecommend] = useLazyQuery(RECOMMEND)
   const [genre, setGenre] = useState('')
   const [books, setBooks] = useState([])
 
   useEffect(() => {
-    console.log('getMe');
     if (resMe.data) {
       resMe.refetch()
     } else {
-      getMe()
+      getMe() 
     }
   }, [getMe, token])
 
   useEffect(() => {
-    console.log(resMe)
     if (!resMe.loading && resMe.data && resMe.data.me) {
       setGenre(resMe.data.me.favoriteGenre)
     }
   }, [resMe])
 
   useEffect(() => {
-    console.log('getRecommend')
     if (genre !== '') {
-      console.log(genre || 'empty');
-      getRecommend({ variables: { genre }})
+      if (resRecommend.data) {
+        resRecommend.refetch()
+      } else {
+        getRecommend({ variables: { genre }})
+      }
     }
-  }, [genre, getRecommend])
+  }, [genre, getRecommend, page])
 
   useEffect(() => {
-    console.log(resRecommend);
     if (resRecommend.called && !resRecommend.loading) {
       setBooks(resRecommend.data.allBooks)
     }
   }, [resRecommend])
 
-  if (!show) {
+  if (page!=='recommend') {
     return null
   }
 

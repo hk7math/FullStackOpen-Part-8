@@ -8,12 +8,13 @@ const LoginForm = ({ show, setToken, setPage }) => {
   const [login, result] = useMutation(LOGIN)
 
   useEffect(() => {
+    let token = localStorage.getItem('library-user-token')
     if (result.data) {
-      const token = result.data.login.value
-      setToken(token)
+      token = result.data.login.value
       localStorage.setItem('library-user-token', token)
-      setPage('authors')
     }
+    setToken(token)
+    setPage('authors')
   }, [result.data, setToken, setPage])
 
   if (!show) {

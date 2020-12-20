@@ -47,7 +47,7 @@ const App = () => {
       />
 
       <Recommendations
-        show={page === 'recommend'}
+        page={page}
         token={token}
       />
 
