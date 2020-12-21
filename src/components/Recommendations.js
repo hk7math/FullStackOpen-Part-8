@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useLazyQuery } from '@apollo/client'
 import { ME, RECOMMEND } from '../queries'
 
-const Recommendations = ({ show, token, page }) => {
+const Recommendations = ({ show, token, page, reload }) => {
   const [getMe, resMe] = useLazyQuery(ME)
   const [getRecommend, resRecommend] = useLazyQuery(RECOMMEND)
   const [genre, setGenre] = useState('')
@@ -14,7 +14,7 @@ const Recommendations = ({ show, token, page }) => {
     } else {
       getMe() 
     }
-  }, [getMe, token])
+  }, [getMe, token, reload])
 
   useEffect(() => {
     if (!resMe.loading && resMe.data && resMe.data.me) {

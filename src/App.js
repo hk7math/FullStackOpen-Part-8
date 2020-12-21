@@ -11,12 +11,12 @@ import { BOOK_ADDED } from './queries'
 const App = () => {
   const [page, setPage] = useState('authors')
   const [token, setToken] = useState(null)
+  const [reload, setReload] = useState(false)
   const client = useApolloClient()
 
   useSubscription(BOOK_ADDED, {
     onSubscriptionData: ({ subscriptionData }) => {
-      const { title } = subscriptionData.data.bookAdded
-      window.alert(`new book: ${title}`)
+      setReload(true)
     }
   })
 
@@ -44,10 +44,12 @@ const App = () => {
 
       <Authors
         show={page === 'authors'}
+        reload={reload}
       />
 
       <Books
         show={page === 'books'}
+        reload={reload}
       />
 
       <NewBook

@@ -1,11 +1,16 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useQuery } from '@apollo/client'
 import { ALL_BOOKS } from '../queries'
 
-const Books = (props) => {
+const Books = ({ show, reload }) => {
   const [genre, setGenre] = useState('all')
   const result = useQuery(ALL_BOOKS)
-  if (!props.show) {
+
+  useEffect(() => {
+    result.refetch()
+  }, [reload])
+
+  if (!show) {
     return null
   }
 
