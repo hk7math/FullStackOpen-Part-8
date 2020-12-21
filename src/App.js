@@ -59,6 +59,7 @@ const App = () => {
       <Recommendations
         page={page}
         token={token}
+        reload={reload}
       />
 
       <LoginForm
